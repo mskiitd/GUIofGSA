@@ -22,6 +22,8 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -47,7 +49,11 @@ import com.alee.managers.notification.WebNotificationPopup;
 public class TransitionExample
 {
 	public static Logger log=LogManager.getLogger();
-	  private static final GridBagConstraints gbc;
+
+	private static final GridBagConstraints gbc;
+	
+	private static char[] input;
+	private static String enteredUsername;
 	    static {
 	        gbc = new GridBagConstraints();
 	        gbc.gridx = 0;
@@ -144,22 +150,45 @@ public class TransitionExample
 	        
 	        panel.add ( new WebLabel ( "Login:", WebLabel.TRAILING ),"cell 1 1" );
 	         username_text=new WebTextField("iitd", 10);
+	         enteredUsername=username_text.getText();	       
+	         username_text.getDocument().addDocumentListener(new DocumentListener() {
+	        	    @Override
+	        	    public void insertUpdate(DocumentEvent e) {
+	        	    	 enteredUsername=username_text.getText();	
+	        	    }
+	        	    @Override
+	        	    public void removeUpdate(DocumentEvent e) {
+	        	    	 enteredUsername=username_text.getText();
+	        	    }
+	        	    @Override
+	        	    public void changedUpdate(DocumentEvent e) {
+	        	    	 enteredUsername=username_text.getText();
+	        	    }
+	        	});
 	         
-	      /*   username_text.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					log.info("changed");
-					
-				}
-			});*/
-
 	        panel.add ( username_text ,"cell 2 1 2 1");
 	        
 	        panel.add ( new WebLabel ( "Password:", WebLabel.TRAILING ) ,"cell 1 2");
 	         passwordText=new WebPasswordField("password",10);
+	         input=passwordText.getPassword();
+	         
+	         passwordText.getDocument().addDocumentListener(new DocumentListener() {
+	        	    @Override
+	        	    public void insertUpdate(DocumentEvent e) {
+	        	    	 input=passwordText.getPassword();	
+	        	    }
+	        	    @Override
+	        	    public void removeUpdate(DocumentEvent e) {
+	        	    	 input=passwordText.getPassword();
+	        	    }
+	        	    @Override
+	        	    public void changedUpdate(DocumentEvent e) {
+	        	    	 input=passwordText.getPassword();
+	        	    }
+	        	});
+	         
 	        panel.add ( passwordText,"cell 2 2 2 1");
-
+	        
 	        final WebButton okButton = new WebButton ( "Ok" );
 	        panel.add(okButton,"cell 2 3 1 1");
 	        
@@ -167,11 +196,10 @@ public class TransitionExample
             clock.setClockType ( ClockType.timer );
             final WebNotificationPopup notificationPopup = new WebNotificationPopup ();
             notificationPopup.setDisplayTime ( 2000 );
-	        
-	        okButton.addActionListener ( new ActionListener ()
+	       
+            
+            okButton.addActionListener ( new ActionListener ()
 	        {
-	        	char[] input = passwordText.getPassword();
-	        	String enteredUsername=username_text.getText();
 	        	
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -234,14 +262,14 @@ public class TransitionExample
 	        frame.setVisible(true);
 	    }
 
-		protected static boolean IsPasswordCorrect(char[] input) {
+		protected static boolean IsPasswordCorrect(char[] passwordInput) {
 			  boolean isCorrect = false;
 			    char[] correctPassword = { 'p', 'a', 's', 's', 'w', 'o', 'r','d' };
 
-			    if (input.length != correctPassword.length) {
+			    if (passwordInput.length != correctPassword.length) {
 			        isCorrect = false;
 			    } else {
-			        isCorrect = Arrays.equals (input, correctPassword);
+			        isCorrect = Arrays.equals (passwordInput, correctPassword);
 			    }
 			    
 			    return isCorrect;
