@@ -5,8 +5,12 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -92,19 +96,31 @@ public class TransitionExample
 	    
 	    public static void main(String[] args) {
 	    	WebLookAndFeel.install();
-	        JFrame frame = new JFrame("Background Image Panel Example");
+	        JFrame frame = new JFrame("Smart Machine");
+//	        new ImageIcon("resources/IIT_Delhi_logo.gif")
+	        Image IITDimg=null;
+			try {
+				IITDimg = ImageIO.read (new File("resources/IIT_Delhi_logo.gif"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        frame.setIconImage(IITDimg);
 	        
 	        JPanel foregroundPanel = new JPanel(new BorderLayout(10, 10));
 	        foregroundPanel.setBorder(
-	                BorderFactory.createEmptyBorder(200,400,100,400));
+	                BorderFactory.createEmptyBorder(200,400,150,400));
 	        foregroundPanel.setOpaque(false);
 	        
 	        
-	        MigLayout layout = new MigLayout();
+	        MigLayout layout = new MigLayout(
+	        		 "", // Layout Constraints
+	        		 "[]40[][]", // Column constraints
+	        		 "[]20[][]30"); // Row constraints
 	        		 
 	        
 	        final WebPanel panel = new WebPanel (layout);
-	        panel.setMargin(100,150, 100, 150);
+	        panel.setMargin(50,150, 50, 150);
 	        
 	        ImageIcon kushalLogo = new ImageIcon("resources/kushalLogo.png");
 		    final WebImage kushalLogoimg = new WebImage (kushalLogo );
@@ -122,14 +138,13 @@ public class TransitionExample
 	        panel.add ( passwordText,"cell 2 2 2 1");
 
 	        WebButton okButton = new WebButton ( "Ok" );
-	        WebButton restButton = new WebButton ( "Reset" );
+	        WebButton resetButton = new WebButton ( "Reset" );
 
 	        panel.add(okButton,"cell 2 3 1 1");
-	        panel.add(restButton, "cell 3 3 1 1");
+	        panel.add(resetButton, "cell 3 3 1 1");
 	         
-	        HotkeyManager.registerHotkey ( frame, okButton, Hotkey.ESCAPE );
-            HotkeyManager.registerHotkey ( frame, restButton, Hotkey.ENTER );
-            
+	        HotkeyManager.registerHotkey ( frame, resetButton, Hotkey.ESCAPE );
+            HotkeyManager.registerHotkey ( frame, okButton, Hotkey.ENTER );
 	        
 	        foregroundPanel.add(panel,
 	                BorderLayout.CENTER);
