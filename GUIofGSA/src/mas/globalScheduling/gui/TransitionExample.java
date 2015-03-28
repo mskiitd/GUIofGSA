@@ -1,14 +1,18 @@
 package mas.globalScheduling.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -25,6 +29,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.alee.extended.image.WebImage;
+import com.alee.extended.panel.GroupPanel;
+import com.alee.extended.time.ClockType;
+import com.alee.extended.time.WebClock;
 import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
@@ -33,6 +40,9 @@ import com.alee.laf.text.WebPasswordField;
 import com.alee.laf.text.WebTextField;
 import com.alee.managers.hotkey.Hotkey;
 import com.alee.managers.hotkey.HotkeyManager;
+import com.alee.managers.notification.NotificationIcon;
+import com.alee.managers.notification.NotificationManager;
+import com.alee.managers.notification.WebNotificationPopup;
 //http://www.java-tips.org/index.php?option=com_content&task=view&sectionid=&id=1838&Itemid=61&mosmsg=Thanks+for+your+vote%21
 public class TransitionExample
 {
@@ -92,6 +102,8 @@ public class TransitionExample
 	    public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	    public static double width = screenSize.getWidth();
 	    public static double height = screenSize.getHeight();
+		private static  WebPasswordField passwordText;
+		private static  WebTextField username_text;
 	    
 	    
 	    public static void main(String[] args) {
@@ -120,6 +132,8 @@ public class TransitionExample
 	        		 
 	        
 	        final WebPanel panel = new WebPanel (layout);
+	        Color panelColor = Color.decode("#E9E9E9");
+	        panel.setBackground(panelColor);
 	        panel.setMargin(50,150, 50, 150);
 	        
 	        ImageIcon kushalLogo = new ImageIcon("resources/kushalLogo.png");
@@ -129,20 +143,80 @@ public class TransitionExample
 	        
 	        
 	        panel.add ( new WebLabel ( "Login:", WebLabel.TRAILING ),"cell 1 1" );
-	        WebTextField username_text=new WebTextField("iitd", 10);
+	         username_text=new WebTextField("iitd", 10);
+	         
+	      /*   username_text.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					log.info("changed");
+					
+				}
+			});*/
 
 	        panel.add ( username_text ,"cell 2 1 2 1");
 	        
 	        panel.add ( new WebLabel ( "Password:", WebLabel.TRAILING ) ,"cell 1 2");
-	        WebPasswordField passwordText=new WebPasswordField("password",10);
+	         passwordText=new WebPasswordField("password",10);
 	        panel.add ( passwordText,"cell 2 2 2 1");
 
-	        WebButton okButton = new WebButton ( "Ok" );
-	        WebButton resetButton = new WebButton ( "Reset" );
-
+	        final WebButton okButton = new WebButton ( "Ok" );
 	        panel.add(okButton,"cell 2 3 1 1");
+	        
+            final WebClock clock = new WebClock ();
+            clock.setClockType ( ClockType.timer );
+            final WebNotificationPopup notificationPopup = new WebNotificationPopup ();
+            notificationPopup.setDisplayTime ( 2000 );
+	        
+	        okButton.addActionListener ( new ActionListener ()
+	        {
+	        	char[] input = passwordText.getPassword();
+	        	String enteredUsername=username_text.getText();
+	        	
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+
+					if(!enteredUsername.equals("iitd") && IsPasswordCorrect(input)==false){
+						notificationPopup.setContent ("Incorrect username and password");
+						 NotificationManager.showNotification ( notificationPopup );
+				            clock.start ();
+					}
+					else if(!enteredUsername.equals("iitd")){
+						notificationPopup.setContent ("Incorrect username");
+						 NotificationManager.showNotification ( notificationPopup );
+				            clock.start ();
+					}
+					else if(IsPasswordCorrect(input)==false){
+						notificationPopup.setContent ("Incorrect password");
+						 NotificationManager.showNotification ( notificationPopup );
+				            clock.start ();
+					}
+				
+					else if(enteredUsername.equals("iitd") && IsPasswordCorrect(input)==true){
+						notificationPopup.setContent ("Welcome to GSA");
+						 NotificationManager.showNotification ( notificationPopup );
+				            clock.start ();
+					}
+					
+				}
+	        } );
+	        
+	        WebButton resetButton = new WebButton ( "Reset" );
+	        resetButton.addActionListener ( new ActionListener ()
+	        {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					username_text.setText("");
+					passwordText.setText("");
+					
+				}
+	        } );
+	        
 	        panel.add(resetButton, "cell 3 3 1 1");
 	         
+	        
+	        
 	        HotkeyManager.registerHotkey ( frame, resetButton, Hotkey.ESCAPE );
             HotkeyManager.registerHotkey ( frame, okButton, Hotkey.ENTER );
 	        
@@ -159,6 +233,19 @@ public class TransitionExample
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	        frame.setVisible(true);
 	    }
+
+		protected static boolean IsPasswordCorrect(char[] input) {
+			  boolean isCorrect = false;
+			    char[] correctPassword = { 'p', 'a', 's', 's', 'w', 'o', 'r','d' };
+
+			    if (input.length != correctPassword.length) {
+			        isCorrect = false;
+			    } else {
+			        isCorrect = Arrays.equals (input, correctPassword);
+			    }
+			    
+			    return isCorrect;
+		}
 }
     
 
