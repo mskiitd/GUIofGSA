@@ -15,17 +15,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.alee.extended.layout.FormLayout;
-import com.alee.extended.panel.GroupPanel;
+import com.alee.extended.image.WebImage;
 import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.text.WebPasswordField;
 import com.alee.laf.text.WebTextField;
+import com.alee.managers.hotkey.Hotkey;
+import com.alee.managers.hotkey.HotkeyManager;
 //http://www.java-tips.org/index.php?option=com_content&task=view&sectionid=&id=1838&Itemid=61&mosmsg=Thanks+for+your+vote%21
 public class TransitionExample
 {
@@ -90,30 +93,47 @@ public class TransitionExample
 	    public static void main(String[] args) {
 	    	WebLookAndFeel.install();
 	        JFrame frame = new JFrame("Background Image Panel Example");
-
+	        
 	        JPanel foregroundPanel = new JPanel(new BorderLayout(10, 10));
 	        foregroundPanel.setBorder(
 	                BorderFactory.createEmptyBorder(200,400,100,400));
 	        foregroundPanel.setOpaque(false);
 	        
-	        final WebPanel panel = new WebPanel ( new FormLayout ( false, true, 5, 40 ) );
-	        panel.setMargin(100,50, 100, 50);
-	        panel.add ( new WebLabel ( "Login:", WebLabel.TRAILING ) );
-	        panel.add ( new WebTextField ( "nikhil" ) );
-	        panel.add ( new WebLabel ( "Password:", WebLabel.TRAILING ) );
-	        panel.add ( new WebPasswordField ( "iitd" ) );
+	        
+	        MigLayout layout = new MigLayout();
+	        		 
+	        
+	        final WebPanel panel = new WebPanel (layout);
+	        panel.setMargin(100,150, 100, 150);
+	        
+	        ImageIcon kushalLogo = new ImageIcon("resources/kushalLogo.png");
+		    final WebImage kushalLogoimg = new WebImage (kushalLogo );
+	        
+	        panel.add(kushalLogoimg,"cell 0 0 8");
 	        
 	        
-	        // Simple button
+	        panel.add ( new WebLabel ( "Login:", WebLabel.TRAILING ),"cell 1 1" );
+	        WebTextField username_text=new WebTextField("iitd", 10);
+
+	        panel.add ( username_text ,"cell 2 1 2 1");
+	        
+	        panel.add ( new WebLabel ( "Password:", WebLabel.TRAILING ) ,"cell 1 2");
+	        WebPasswordField passwordText=new WebPasswordField("password",10);
+	        panel.add ( passwordText,"cell 2 2 2 1");
+
 	        WebButton okButton = new WebButton ( "Ok" );
-	        // Disabled button
-	        WebButton cancelButton = new WebButton ( "Cancel" );
-	        
-	        GroupPanel gp= new GroupPanel ( 10, new GroupPanel ( okButton ), cancelButton );
-	        panel.add(gp);
+	        WebButton restButton = new WebButton ( "Reset" );
+
+	        panel.add(okButton,"cell 2 3 1 1");
+	        panel.add(restButton, "cell 3 3 1 1");
+	         
+	        HotkeyManager.registerHotkey ( frame, okButton, Hotkey.ESCAPE );
+            HotkeyManager.registerHotkey ( frame, restButton, Hotkey.ENTER );
+            
 	        
 	        foregroundPanel.add(panel,
 	                BorderLayout.CENTER);
+	
 	        
 	        frame.setContentPane(wrapInBackgroundImage(foregroundPanel,
 	                new ImageIcon(
