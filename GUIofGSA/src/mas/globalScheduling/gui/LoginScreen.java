@@ -22,6 +22,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -36,6 +37,7 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebFrame;
 import com.alee.laf.text.WebPasswordField;
 import com.alee.laf.text.WebTextField;
+import com.alee.log.Log;
 import com.alee.managers.hotkey.Hotkey;
 import com.alee.managers.hotkey.HotkeyManager;
 import com.alee.managers.notification.NotificationManager;
@@ -45,6 +47,8 @@ public class LoginScreen {
 
 	
 	private WebFrame frame;
+	private JPanel foregroundPanel;
+	private JPanel wrappedBackgroundImage;
 	private static final GridBagConstraints gbc;
     public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     public static double width = screenSize.getWidth();
@@ -121,7 +125,7 @@ public class LoginScreen {
 		}
         frame.setIconImage(IITDimg);
         
-        JPanel foregroundPanel = new JPanel(new BorderLayout(10, 10));
+         foregroundPanel = new JPanel(new BorderLayout(10, 10));
         foregroundPanel.setBorder(
                 BorderFactory.createEmptyBorder(200,400,150,400));
         foregroundPanel.setOpaque(false);
@@ -220,7 +224,7 @@ public class LoginScreen {
 					notificationPopup.setContent ("Welcome to GSA");
 					 NotificationManager.showNotification ( notificationPopup );
 			            clock.start ();
-		            
+					CleanUpVars();
 				}
 				
 			}
@@ -249,16 +253,44 @@ public class LoginScreen {
                 BorderLayout.CENTER);
 
         
-        frame.setContentPane(wrapInBackgroundImage(foregroundPanel,
+        wrappedBackgroundImage=wrapInBackgroundImage(foregroundPanel,
                 new ImageIcon(
-                "resources/LoginBackground.png")));
+                "resources/LoginBackground.png"));
+        frame.add(wrappedBackgroundImage);
         
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        
+        
+        
 	}
 	
+
+	protected void CleanUpVars() {
+		
+//		Log.info(Integer.toString(this.frame.getComponentCount()));
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			
+			@Override
+			public void run() {
+				Log.info("here");
+//				frame.removeAll();
+				frame.remove(foregroundPanel);
+				frame.remove(wrappedBackgroundImage);
+				
+				frame.repaint();
+				Log.info(Integer.toString(frame.getComponentCount()));
+				NegotiationScreen ns=new NegotiationScreen(frame);
+				ns.load();
+				
+			}
+		});
+		
+		
+	}
 
 	protected static boolean IsPasswordCorrect(char[] passwordInput) {
 		  boolean isCorrect = false;
