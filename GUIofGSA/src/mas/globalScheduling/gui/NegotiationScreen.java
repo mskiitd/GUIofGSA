@@ -48,6 +48,7 @@ public class NegotiationScreen {
 	    		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	    
 	    jScrollPane.setPreferredHeight(600);
+	    jScrollPane.setPreferredWidth(400);
 	    MainPanel.add(jScrollPane, "wrap");
 	    
 	    WebPanel menu=new WebPanel(new FlowLayout());
@@ -85,7 +86,7 @@ public class NegotiationScreen {
 		}
 		System.out.println(img);
 	    About.setIcon(new ImageIcon(img));
-	    About.setPreferredSize(new Dimension(115,115));
+	    About.setPreferredSize(new Dimension(90,90));
 	    buttons[0]=About;
 	    
 	    
@@ -97,7 +98,7 @@ public class NegotiationScreen {
 	 			e.printStackTrace();
 	 		}
  		Negotiation.setIcon(new ImageIcon( negotiationImg));
- 		Negotiation.setPreferredSize(new Dimension(115,115));
+ 		Negotiation.setPreferredSize(new Dimension(90,90));
  		buttons[1]=Negotiation;
  		
  		JButton JobManager = new JButton();
@@ -108,7 +109,7 @@ public class NegotiationScreen {
 	 			e.printStackTrace();
 	 		}
 	 		JobManager.setIcon(new ImageIcon( JobManagerImg));
-	 		JobManager.setPreferredSize(new Dimension(115,115));
+	 		JobManager.setPreferredSize(new Dimension(90,90));
  		buttons[2]=JobManager;
 
  		JButton CompletedJobs = new JButton();
@@ -119,7 +120,7 @@ public class NegotiationScreen {
 	 			e.printStackTrace();
 	 		}
 	 		CompletedJobs.setIcon(new ImageIcon( CompletedJobsImg));
-	 		CompletedJobs.setPreferredSize(new Dimension(115,115));
+	 		CompletedJobs.setPreferredSize(new Dimension(90,90));
  		buttons[3]=CompletedJobs;
  		
 		return buttons;
