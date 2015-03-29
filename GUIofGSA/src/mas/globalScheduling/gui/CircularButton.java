@@ -199,7 +199,7 @@ public class CircularButton extends JButton {
 	private void paintInsetCircle(Graphics2D graphics, int size, int inset) {
 		graphics.fillOval(inset, inset, size - inset * 2, size - inset * 2);
 	}
-/*	public static void main(String args[]) {
+	public static void main(String args[]) {
 		JFrame frame = new JFrame("Custom Panels Demo");
 		frame.setLayout(new FlowLayout());
 		CircularButton standardButton = new CircularButton("Standard Button");
@@ -223,5 +223,5 @@ public class CircularButton extends JButton {
 		frame.setBackground(Color.WHITE);
 		frame.setSize(700, 180);
 		frame.setVisible(true);
-}*/
+}
 }

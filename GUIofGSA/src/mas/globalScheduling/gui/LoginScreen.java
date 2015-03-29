@@ -221,8 +221,8 @@ public class LoginScreen {
 				}
 			
 				else if(enteredUsername.equals("iitd") && IsPasswordCorrect(input)==true){
-					notificationPopup.setContent ("Welcome to GSA");
-					 NotificationManager.showNotification ( notificationPopup );
+//					notificationPopup.setContent ("Welcome to GSA");
+//					 NotificationManager.showNotification ( notificationPopup );
 			            clock.start ();
 					CleanUpVars();
 				}
