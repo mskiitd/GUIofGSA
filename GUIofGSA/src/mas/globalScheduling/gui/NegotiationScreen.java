@@ -48,7 +48,6 @@ public class NegotiationScreen {
 	    		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	    
 	    jScrollPane.setPreferredHeight(600);
-	    jScrollPane.setPreferredWidth(400);
 	    MainPanel.add(jScrollPane, "wrap");
 	    
 	    WebPanel menu=new WebPanel(new FlowLayout());
