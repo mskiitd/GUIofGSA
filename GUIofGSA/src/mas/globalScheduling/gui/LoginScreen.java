@@ -283,7 +283,7 @@ public class LoginScreen {
 				
 				frame.repaint();
 				Log.info(Integer.toString(frame.getComponentCount()));
-				NegotiationScreen ns=new NegotiationScreen(frame);
+				WelcomeScreen ns=new WelcomeScreen(frame);
 				ns.load();
 				
 			}
