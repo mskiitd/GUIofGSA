@@ -42,6 +42,7 @@ public class WelcomeScreen {
 	private static BorderLayout layout;
 	public static WebScrollPane currentJobList;
 	private static WebPanel MainPanel;
+	private static Logger log=LogManager.getLogger();
 	
 	public WelcomeScreen(WebFrame frame) {
 		this.welcomeScreenFrame=frame;
@@ -91,44 +92,15 @@ public class WelcomeScreen {
 	    About.setPreferredSize(new Dimension(90,90));
 	    About.setActionCommand("about");
 	    About.addActionListener(new ActionListener() {
-	    	
-            private Logger log=LogManager.getLogger();
-
 			public void actionPerformed(ActionEvent e){
-//            {	JLabel label = new JLabel("Label");
-            	log.info(currentJobList);
-            	job j=new job.Builder("11").jobCPN(0).
-            			jobStartTimeByCust(0).jobDueDateTime(1000).build();
-            	
-            	List<JobTile> listOfjobTiles=new ArrayList<JobTile>();
-            	for(int i=0;i<10;i++){
-            		listOfjobTiles.add(new JobTile(j));	
-            	}
-            	JTable jobListTable=new JTable(new JobTileRenderer(listOfjobTiles));
-          
-            	jobListTable.setDefaultRenderer(JobTile.class, new JobTileCell());
-            	jobListTable.setDefaultEditor(JobTile.class, new JobTileCell());
-            	jobListTable.setRowHeight(100);
-            			
-            	currentJobList=new WebScrollPane(jobListTable);
-            	JobList JobListPane =new JobList();
-            	MainPanel.add(currentJobList,BorderLayout.WEST);
-            	
-/*            	if(currentJobList!=null){
+			 	if(currentJobList!=null){
             		MainPanel.remove(currentJobList);
             		currentJobList=null;
             		log.info("currentJobList "+"is not null");
             	}
             	else{
-            		currentJobList=new WebScrollPane(label);
             		log.info("currentJobList "+"is null");
-            		MainPanel.add(currentJobList,BorderLayout.WEST);
-            	}*/
-        		
-            	welcomeScreenFrame.add(MainPanel);
-            	welcomeScreenFrame.revalidate();
-            	welcomeScreenFrame.repaint();
-            	welcomeScreenFrame.setVisible(true);
+            	}
             	
             }
         });  
@@ -138,25 +110,79 @@ public class WelcomeScreen {
 	    JButton Negotiation = new JButton();
 	    Image negotiationImg = null;
 	 		try {
-	 			negotiationImg = ImageIO.read (new File("resources/JobManager.png"));
+	 			negotiationImg = ImageIO.read (new File("resources/negotiation.png"));
 	 		} catch (IOException e) {
 	 			e.printStackTrace();
 	 		}
  		Negotiation.setIcon(new ImageIcon( negotiationImg));
  		Negotiation.setPreferredSize(new Dimension(90,90));
  		Negotiation.setActionCommand("negotition");
+ 		Negotiation.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(currentJobList!=null){
+            		MainPanel.remove(currentJobList);
+            		currentJobList=null;
+            		log.info("currentJobList "+"is not null");
+            	}
+//            	else{
+            	log.info(currentJobList);
+            	job j=new job.Builder("11").jobCPN(0).
+            			jobStartTimeByCust(0).jobDueDateTime(1000).build();
+            	
+            	List<JobTile> listOfjobTiles=new ArrayList<JobTile>();
+            	for(int i=0;i<10;i++){
+            		listOfjobTiles.add(new JobTile(j));	
+            	}
+            	JTable jobListTable=new JTable(new JobTileRenderer(listOfjobTiles));
+            	jobListTable.setDefaultRenderer(JobTile.class, new JobTileCell());
+            	jobListTable.setDefaultEditor(JobTile.class, new JobTileCell());
+            	jobListTable.setRowHeight(90);
+            			
+            	currentJobList=new WebScrollPane(jobListTable);
+            	currentJobList.setPreferredWidth(350);
+            	JobList JobListPane =new JobList();
+            	MainPanel.add(currentJobList,BorderLayout.WEST);
+
+        
+        		log.info("currentJobList "+"is null");
+        		MainPanel.add(currentJobList,BorderLayout.WEST);
+//            	}
+        		
+            	welcomeScreenFrame.add(MainPanel);
+            	welcomeScreenFrame.revalidate();
+            	welcomeScreenFrame.repaint();
+            	welcomeScreenFrame.setVisible(true);
+				
+			}
+		});
+ 		
  		buttons[1]=Negotiation;
  		
  		JButton JobManager = new JButton();
 	    Image JobManagerImg = null;
 	 		try {
-	 			JobManagerImg = ImageIO.read (new File("resources/negotiation.png"));
+	 			JobManagerImg = ImageIO.read (new File("resources/JobManager.png"));
 	 		} catch (IOException e) {
 	 			e.printStackTrace();
 	 		}
 	 		JobManager.setIcon(new ImageIcon( JobManagerImg));
 	 		JobManager.setPreferredSize(new Dimension(90,90));
 	 		JobManager.setActionCommand("jobManager");
+	 		
+	 		JobManager.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e){
+				 	if(currentJobList!=null){
+	            		MainPanel.remove(currentJobList);
+	            		currentJobList=null;
+	            		log.info("currentJobList "+"is not null");
+	            	}
+	            	else{
+	            	}
+	            }
+	        });  
+	 		
  		buttons[2]=JobManager;
 
  		JButton signOut = new JButton();
@@ -169,6 +195,19 @@ public class WelcomeScreen {
 	 		signOut.setIcon(new ImageIcon( signOutImg));
 	 		signOut.setPreferredSize(new Dimension(90,90));
 	 		signOut.setActionCommand("signOut");
+	 		
+	 		signOut.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e){
+				 	if(currentJobList!=null){
+	            		MainPanel.remove(currentJobList);
+	            		currentJobList=null;
+	            		log.info("currentJobList "+"is not null");
+	            	}
+	            	else{
+	            	}
+	            }
+	        });
+	 		
  		buttons[3]=signOut;
  		
  		JButton completedJobs = new JButton();
@@ -181,6 +220,19 @@ public class WelcomeScreen {
 	 		completedJobs.setIcon(new ImageIcon( CompletedJobsImg));
 	 		completedJobs.setPreferredSize(new Dimension(90,90));
 	 		completedJobs.setActionCommand("completedJob");
+	 		
+	 		completedJobs.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e){
+				 	if(currentJobList!=null){
+	            		MainPanel.remove(currentJobList);
+	            		currentJobList=null;
+	            		log.info("currentJobList "+"is not null");
+	            	}
+	            	else{
+	            	}
+	            }
+	        });
+	 		
  		buttons[4]=completedJobs;
  		
 		return buttons;
