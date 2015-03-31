@@ -31,6 +31,7 @@ import net.miginfocom.swing.MigLayout;
 import com.alee.extended.image.WebImage;
 import com.alee.extended.time.ClockType;
 import com.alee.extended.time.WebClock;
+import com.alee.global.StyleConstants;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.panel.WebPanel;
@@ -244,7 +245,7 @@ public class LoginScreen {
         } );
         
         panel.add(resetButton, "cell 3 3 1 1");
-         
+        panel.setRound ( StyleConstants.largeRound );
         
         
         HotkeyManager.registerHotkey ( frame, resetButton, Hotkey.ESCAPE );

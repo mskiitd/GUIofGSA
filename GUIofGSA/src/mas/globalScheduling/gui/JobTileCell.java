@@ -49,8 +49,8 @@ public class JobTileCell extends AbstractCellEditor implements TableCellEditor, 
     
 	public JobTileCell(){
 		tile=new JPanel(new MigLayout("",
-				"[]15[][]",
-				"[][][][]"
+				"[]10",
+				""
 				));
 		jobID=new JLabel();
 		jobID.setName("JobID");
@@ -58,15 +58,6 @@ public class JobTileCell extends AbstractCellEditor implements TableCellEditor, 
 		dueDate.setName("Due date by customer");
 		startDate=new JLabel();
 		startDate.setName("Start date by customer");
-		/*more=new JButton();
-		more.setName("More options");
-		more.addActionListener(new ActionListener(){
-			private Logger log=LogManager.getLogger();
-
-			public void actionPerformed(ActionEvent actEvent){
-				log.info(new Date(System.currentTimeMillis()));
-			}
-		});*/
 		
 		priorityText=new JLabel();
 		priorityText.setName("prioityText");
@@ -79,15 +70,15 @@ public class JobTileCell extends AbstractCellEditor implements TableCellEditor, 
 		this.jobTileInCell = feed;
 		
 		jobID.setText("Job ID : "+jobTileInCell.getJobID());
-		dueDate.setText("Due date : "+formatter.format(jobTileInCell.getDueDate()));
-		startDate.setText("Start Date : "+formatter.format(jobTileInCell.getStartDate()));
+		dueDate.setText("Due date : "+formatter.format(jobTileInCell.getCustDueDate()));
+		startDate.setText("Start Date : "+formatter.format(jobTileInCell.getCustStartDate()));
 //		more.setText("more");
 		priorityText.setText("Priority : ");
 
 		PriorityNoText="<html><b>"+Integer.toString((int)jobTileInCell.getPriority())+"</b></html>";
 		priorityNo.setText(PriorityNoText);
 		
-		tile.add(jobID);
+		tile.add(jobID,"wrap");
 //		tile.add(more, "align right, wrap");
 		tile.add(dueDate,"wrap");
 		tile.add(startDate);
@@ -100,10 +91,9 @@ public class JobTileCell extends AbstractCellEditor implements TableCellEditor, 
             @Override
             public void mousePressed ( final MouseEvent e )
             {
-            	if(SwingUtils.isRightMouseButton(e)){
-            		// Menu with custom elements
-                    createMenu ().showMenu ( e.getComponent (), e.getPoint () );
-            	}
+             if(SwingUtils.isRightMouseButton(e)){
+            	createMenu (jobTileInCell).showMenu ( e.getComponent (), e.getPoint () );
+             }
                     
             }
         }
@@ -114,26 +104,14 @@ public class JobTileCell extends AbstractCellEditor implements TableCellEditor, 
 			tile.setBackground(table.getSelectionBackground());
 			Component[] comps=tile.getComponents();
 			for(int i=0;i<comps.length;i++){
-//				Log.info("comp name ="+comps[i].getName());
-				if(comps[i].getName().equals("More options")){
-					//do nothing
-				}
-				else{
 					comps[i].setForeground(Color.WHITE);
-				}
 			}
 			
 		}else{
 			tile.setBackground(table.getSelectionForeground());
 			Component[] comps=tile.getComponents();
 			for(int i=0;i<comps.length;i++){
-//				Log.info("comp name ="+comps[i].getName());
-				if(comps[i].getName().equals("More options")){
-					//do nothing
-				}
-				else{
 					comps[i].setForeground(Color.BLACK);
-				}
 			}
 		}		
 	}
@@ -147,6 +125,7 @@ public class JobTileCell extends AbstractCellEditor implements TableCellEditor, 
 	public Component getTableCellEditorComponent(JTable table, Object value,
 			boolean isSelected, int row, int column) {
 		//returns component in editatble format. So button will get clicked
+		WelcomeScreen.unloadInfoPanel();
 		JobTile feed = (JobTile)value;
 		updateData(feed, true, table);//updateData(feed, isSelected, table); is wrong
 		//as isSelected=false initially. So, even if u click, background colour will not change
@@ -164,7 +143,8 @@ public class JobTileCell extends AbstractCellEditor implements TableCellEditor, 
 		}
 
 
-	  protected WebDynamicMenu createMenu ()
+	  protected WebDynamicMenu createMenu (final JobTile jobTileInsideCell) 
+	  //don't why it was needed to be declared as final
 	    {
 	        final WebDynamicMenu menu = new WebDynamicMenu ();
 	        menu.setType ( ( DynamicMenuType ) DynamicMenuType.roll );
@@ -179,7 +159,9 @@ public class JobTileCell extends AbstractCellEditor implements TableCellEditor, 
 	                @Override
 	                public void actionPerformed ( final ActionEvent e )
 	                {
-	                    System.out.println ( MoreIcon );
+	                	WelcomeScreen.unloadInfoPanel();
+	                	WelcomeScreen.createInfoPanel(jobTileInsideCell);
+//	                    System.out.println ( MoreIcon );
 	                }
 	            };
 	            final WebDynamicMenuItem moreIconItem = new WebDynamicMenuItem ( MoreIcon, moreAction );
@@ -192,6 +174,7 @@ public class JobTileCell extends AbstractCellEditor implements TableCellEditor, 
 	                @Override
 	                public void actionPerformed ( final ActionEvent e )
 	                {
+	                	WelcomeScreen.unloadInfoPanel();
 	                    System.out.println ( QueryIcon );
 	                }
 	            };
@@ -205,14 +188,13 @@ public class JobTileCell extends AbstractCellEditor implements TableCellEditor, 
                 @Override
                 public void actionPerformed ( final ActionEvent e )
                 {
+                	WelcomeScreen.unloadInfoPanel();
                     System.out.println ( CancelJobIcon );
                 }
             };
             final WebDynamicMenuItem cancelJobItem = new WebDynamicMenuItem ( CancelJobIcon, CancelJobAction );
             cancelJobItem.setMargin ( new Insets ( 8, 8, 8, 8 ) );
             menu.addItem ( cancelJobItem );
-	            
-	            
 	            
 	        return menu;
 	    }
