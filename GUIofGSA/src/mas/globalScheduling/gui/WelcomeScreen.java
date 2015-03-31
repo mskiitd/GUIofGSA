@@ -15,10 +15,12 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 
@@ -47,7 +49,7 @@ public class WelcomeScreen {
 		this.welcomeScreenFrame=frame;
 		this.layout=new BorderLayout();
 		this.MainPanel=new WebPanel(layout);
-		MigLayout migLayout=new MigLayout("","200","[30]");
+		MigLayout migLayout=new MigLayout();
 		this.infoPanel=new WebPanel(migLayout);
 		this.currentJobList=null;
 	}
@@ -81,6 +83,9 @@ public class WelcomeScreen {
 
 	//called by dynamic menu buttons to fill up info in rightsaide of main panel
 	public static void createInfoPanel(JobTile jobToShow){
+		MigLayout migLayout=new MigLayout("","200","[30]");
+		WebPanel detailsPanel=new WebPanel(migLayout);
+		
 		final Format formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		
 		WebLabel JobNametextlbl,JobIDTxtlbl,jobCustStartDateTxtlbl,jobCustDueDateTextlbl,
@@ -143,26 +148,32 @@ public class WelcomeScreen {
 		jobGSAStartDatelbl.setFont(lblFont);
 		jobGSADueDatelbl.setFont(lblFont);
 		
-		infoPanel.add(JobNametextlbl,"growx");
-		infoPanel.add(JobIDTxtlbl,"growx");
-		infoPanel.add(jobCustStartDateTxtlbl,"growx");
-		infoPanel.add(jobCustDueDateTextlbl,"wrap, growx");
+		detailsPanel.add(JobNametextlbl,"growx");
+		detailsPanel.add(JobIDTxtlbl,"growx");
+		detailsPanel.add(jobCustStartDateTxtlbl,"growx");
+		detailsPanel.add(jobCustDueDateTextlbl,"wrap, growx");
 		
-		infoPanel.add(JobNamelbl,"growx");
-		infoPanel.add(JobIDlbl,"growx");
-		infoPanel.add(jobCustDueDatelbl,"growx");
-		infoPanel.add(jobCustStartDatelbl,"growx");
-		infoPanel.add(jobCustDueDatelbl,"wrap, growx");
+		detailsPanel.add(JobNamelbl,"growx");
+		detailsPanel.add(JobIDlbl,"growx");
+		detailsPanel.add(jobCustDueDatelbl,"growx");
+		detailsPanel.add(jobCustStartDatelbl,"growx");
+		detailsPanel.add(jobCustDueDatelbl,"wrap, growx");
 		
-		infoPanel.add(durationTextlbl,"growx");
-		infoPanel.add(priorityTextlbl,"growx");
-		infoPanel.add(jobGSAStartDateTxtlbl,"growx");
-		infoPanel.add(jobGSADueDateTxtlbl,"wrap, growx");
+		detailsPanel.add(durationTextlbl,"growx");
+		detailsPanel.add(priorityTextlbl,"growx");
+		detailsPanel.add(jobGSAStartDateTxtlbl,"growx");
+		detailsPanel.add(jobGSADueDateTxtlbl,"wrap, growx");
 		
-		infoPanel.add(durationlbl,"growx");
-		infoPanel.add(prioritylbl,"growx");
-		infoPanel.add(jobGSAStartDatelbl,"growx");
-		infoPanel.add(jobGSADueDatelbl,"wrap, growx");
+		detailsPanel.add(durationlbl,"growx");
+		detailsPanel.add(prioritylbl,"growx");
+		detailsPanel.add(jobGSAStartDatelbl,"growx");
+		detailsPanel.add(jobGSADueDatelbl,"wrap, growx");
+		
+		infoPanel.add(detailsPanel,"wrap");
+		
+		JScrollPane jobTable=createsJobsTable(); //jobs in batch
+		
+		infoPanel.add(jobTable);
 		
 		MainPanel.add(infoPanel,BorderLayout.CENTER);
 		welcomeScreenFrame.validate();
@@ -172,6 +183,38 @@ public class WelcomeScreen {
 		
 	}
 	
+	private static JScrollPane createsJobsTable() {
+		
+		//this is temperory
+	//needs to be modified after batch class is written
+
+		Random r=new Random();
+		int noOfJobs=Math.abs(r.nextInt(10));
+		int noOfJobParams=3;
+		Object jobData[][] =new Object[noOfJobs][noOfJobParams];
+		
+		for(int i=0;i<noOfJobs;i++){
+			for(int j=0;j<noOfJobParams;j++){
+				if(j==0){
+					jobData[i][j]="job"+Math.abs(r.nextInt(10));	
+				}
+				else if(j==1){
+					jobData[i][j]=""+Math.abs(r.nextInt(10));
+				}
+				else if(j==2){
+					jobData[i][j]=""+Math.abs(r.nextInt(10));
+				}
+			}
+		}
+		
+	    Object columnNames[] = { "Job Name", "Job ID", "Quantity" };
+	    JTable table = new JTable(jobData, columnNames);
+	    JScrollPane jsp=new JScrollPane(table);
+
+		return jsp;
+		
+		
+	}
 	public static void unloadInfoPanel(){
 		infoPanel.removeAll();
 		MainPanel.remove(infoPanel);
