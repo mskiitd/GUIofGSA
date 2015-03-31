@@ -138,6 +138,7 @@ public class LoginScreen {
         		 
         
         final WebPanel panel = new WebPanel (layout);
+//        panel.setUndecorated(false);
         Color panelColor = Color.decode("#E9E9E9");
         panel.setBackground(panelColor);
         panel.setMargin(50,150, 50, 150);
@@ -255,7 +256,7 @@ public class LoginScreen {
         
         wrappedBackgroundImage=wrapInBackgroundImage(foregroundPanel,
                 new ImageIcon(
-                "resources/LoginBackground.png"));
+                "resources/LoginBackground.jpg"));
         frame.add(wrappedBackgroundImage);
         
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);

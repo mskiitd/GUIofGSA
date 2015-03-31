@@ -94,9 +94,11 @@ public class WelcomeScreen {
 	    About.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 			 	if(currentJobList!=null){
-            		MainPanel.remove(currentJobList);
-            		currentJobList=null;
-            		log.info("currentJobList "+"is not null");
+			 		MainPanel.remove(currentJobList);
+            		currentJobList=null;//causes memory leak
+            		welcomeScreenFrame.revalidate();
+            		welcomeScreenFrame.repaint();
+            		welcomeScreenFrame.setVisible(true);
             	}
             	else{
             		log.info("currentJobList "+"is null");
@@ -124,6 +126,9 @@ public class WelcomeScreen {
 				if(currentJobList!=null){
             		MainPanel.remove(currentJobList);
             		currentJobList=null;
+            		welcomeScreenFrame.revalidate();
+            		welcomeScreenFrame.repaint();
+            		welcomeScreenFrame.setVisible(true);
             		log.info("currentJobList "+"is not null");
             	}
 //            	else{
